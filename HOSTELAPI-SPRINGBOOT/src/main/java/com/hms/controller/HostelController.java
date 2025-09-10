@@ -2,51 +2,72 @@ package com.hms.controller;
 
 import com.hms.entity.Hostel;
 import com.hms.service.HostelService;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/hostels")
-@CrossOrigin(origins = "http://localhost:5173") // allow frontend React app
+@RequestMapping("/hostelapi")
+@CrossOrigin(origins = "*") // allow React frontend
 public class HostelController {
 
     @Autowired
     private HostelService hostelService;
 
+    @GetMapping("/")
+    public String home() {
+        return "Hostel Management System API is Running 🚀";
+    }
+
     // Create
-    @PostMapping("/")
-    public Hostel addHostel(@RequestBody Hostel hostel) {
-        return hostelService.addHostel(hostel);
+    @PostMapping("/add")
+    public ResponseEntity<Hostel> addHostel(@RequestBody Hostel hostel) {
+        Hostel savedHostel = hostelService.addHostel(hostel);
+        return new ResponseEntity<>(savedHostel, HttpStatus.CREATED);
     }
 
     // Read all
-    @GetMapping("/")
-    public List<Hostel> getAllHostels() {
-        return hostelService.getAllHostels();
-        
+    @GetMapping("/all")
+    public ResponseEntity<List<Hostel>> getAllHostels() {
+        List<Hostel> hostels = hostelService.getAllHostels();
+        return new ResponseEntity<>(hostels, HttpStatus.OK);
     }
 
     // Read by ID
-    @GetMapping("/{id}")
-    public Hostel getHostelById(@PathVariable int id) {
-        return hostelService.getHostelById(id);
-        
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getHostelById(@PathVariable int id) {
+        Hostel hostel = hostelService.getHostelById(id);
+        if (hostel != null) {
+            return new ResponseEntity<>(hostel, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Hostel with ID " + id + " not found.", HttpStatus.NOT_FOUND);
+        }
     }
 
     // Update
-    @PutMapping("/{id}")
-    public Hostel updateHostel(@PathVariable int id, @RequestBody Hostel hostel) {
-        hostel.setId(id); // ensure correct ID is used
-        return hostelService.updateHostel(hostel);
+    @PutMapping("/update")
+    public ResponseEntity<?> updateHostel(@RequestBody Hostel hostel) {
+        Hostel existing = hostelService.getHostelById(hostel.getId());
+        if (existing != null) {
+            Hostel updatedHostel = hostelService.updateHostel(hostel);
+            return new ResponseEntity<>(updatedHostel, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Cannot update. Hostel with ID " + hostel.getId() + " not found.", HttpStatus.NOT_FOUND);
+        }
     }
 
     // Delete
-    @DeleteMapping("/{id}")
-    public String deleteHostel(@PathVariable int id) {
-        hostelService.deleteHostelById(id);
-        return "Hostel with ID " + id + " deleted successfully!";
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteHostel(@PathVariable int id) {
+        Hostel existing = hostelService.getHostelById(id);
+        if (existing != null) {
+            hostelService.deleteHostelById(id);
+            return new ResponseEntity<>("Hostel with ID " + id + " deleted successfully.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Cannot delete. Hostel with ID " + id + " not found.", HttpStatus.NOT_FOUND);
+        }
     }
 }

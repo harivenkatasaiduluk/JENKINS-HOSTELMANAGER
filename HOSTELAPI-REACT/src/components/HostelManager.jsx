@@ -1,161 +1,157 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import config from "./config.js"; // Import API base URL
 import "./style.css";
-import config from "./config.js";
-
-const BASE_URL = config.BASE_URL || "http://localhost:2035/api/hostels";
 
 const HostelManager = () => {
   const [hostels, setHostels] = useState([]);
-  const [form, setForm] = useState({
+  const [hostel, setHostel] = useState({
     id: "",
     hostelName: "",
     location: "",
     capacity: "",
-    wardenName: ""
+    wardenName: "",
   });
+  const [editing, setEditing] = useState(false);
 
-  // Fetch all hostels on component mount
-  useEffect(() => {
-    fetchHostels();
-  }, []);
+  const API_URL = config.url;
 
+  // Fetch all hostels
   const fetchHostels = async () => {
     try {
-      const response = await axios.get(BASE_URL + "/");
+      const response = await axios.get(`${API_URL}/all`);
       setHostels(response.data);
     } catch (error) {
       console.error("Error fetching hostels:", error);
     }
   };
 
-  // Handle form input changes
+  useEffect(() => {
+    fetchHostels();
+  }, []);
+
+  // Handle input change
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setHostel({ ...hostel, [name]: value });
   };
 
-  // Handle form submit for Add/Update
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Add new hostel
+  const addHostel = async () => {
     try {
-      if (form.id) {
-        // Update existing hostel
-        await axios.put(`${BASE_URL}/${form.id}`, {
-          hostelName: form.hostelName,
-          location: form.location,
-          capacity: parseInt(form.capacity),
-          wardenName: form.wardenName
-        });
-      } else {
-        // Add new hostel
-        await axios.post(BASE_URL + "/", {
-          hostelName: form.hostelName,
-          location: form.location,
-          capacity: parseInt(form.capacity),
-          wardenName: form.wardenName
-        });
-      }
-      setForm({ id: "", hostelName: "", location: "", capacity: "", wardenName: "" });
+      await axios.post(`${API_URL}/add`, hostel);
       fetchHostels();
+      resetForm();
     } catch (error) {
-      console.error("Error saving hostel:", error);
+      console.error("Error adding hostel:", error);
     }
   };
 
-  // Handle edit button
-  const handleEdit = (hostel) => {
-    setForm({
-      id: hostel.id,
-      hostelName: hostel.hostelName,
-      location: hostel.location,
-      capacity: hostel.capacity,
-      wardenName: hostel.wardenName
-    });
+  // Update hostel
+  const updateHostel = async () => {
+    try {
+      await axios.put(`${API_URL}/update`, hostel);
+      fetchHostels();
+      resetForm();
+      setEditing(false);
+    } catch (error) {
+      console.error("Error updating hostel:", error);
+    }
   };
 
-  // Handle delete button
-  const handleDelete = async (id) => {
+  // Delete hostel
+  const deleteHostel = async (id) => {
     try {
-      await axios.delete(`${BASE_URL}/${id}`);
+      await axios.delete(`${API_URL}/delete/${id}`);
       fetchHostels();
     } catch (error) {
       console.error("Error deleting hostel:", error);
     }
   };
 
-  return (
-    <div className="hostel-manager">
-      <h2>Hostel Manager</h2>
+  // Edit hostel
+  const editHostel = (h) => {
+    setHostel(h);
+    setEditing(true);
+  };
 
-      <form onSubmit={handleSubmit}>
+  // Reset form
+  const resetForm = () => {
+    setHostel({
+      id: "",
+      hostelName: "",
+      location: "",
+      capacity: "",
+      wardenName: "",
+    });
+  };
+
+  return (
+    <div className="container">
+      <h2>Hostel Management</h2>
+
+      {/* Form */}
+      <div className="form">
         <input
           type="text"
           name="hostelName"
           placeholder="Hostel Name"
-          value={form.hostelName}
+          value={hostel.hostelName}
           onChange={handleChange}
-          required
         />
         <input
           type="text"
           name="location"
           placeholder="Location"
-          value={form.location}
+          value={hostel.location}
           onChange={handleChange}
-          required
         />
         <input
           type="number"
           name="capacity"
           placeholder="Capacity"
-          value={form.capacity}
+          value={hostel.capacity}
           onChange={handleChange}
-          required
         />
         <input
           type="text"
           name="wardenName"
           placeholder="Warden Name"
-          value={form.wardenName}
+          value={hostel.wardenName}
           onChange={handleChange}
-          required
         />
-        <button type="submit">{form.id ? "Update Hostel" : "Add Hostel"}</button>
-        {form.id && (
-          <button
-            type="button"
-            onClick={() =>
-              setForm({ id: "", hostelName: "", location: "", capacity: "", wardenName: "" })
-            }
-          >
-            Cancel
-          </button>
-        )}
-      </form>
 
-      <h3>All Hostels</h3>
+        {editing ? (
+          <button onClick={updateHostel}>Update Hostel</button>
+        ) : (
+          <button onClick={addHostel}>Add Hostel</button>
+        )}
+        <button onClick={resetForm}>Clear</button>
+      </div>
+
+      {/* Hostel List */}
       <table>
         <thead>
           <tr>
             <th>ID</th>
-            <th>Name</th>
+            <th>Hostel Name</th>
             <th>Location</th>
             <th>Capacity</th>
-            <th>Warden</th>
+            <th>Warden Name</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {hostels.map((hostel) => (
-            <tr key={hostel.id}>
-              <td>{hostel.id}</td>
-              <td>{hostel.hostelName}</td>
-              <td>{hostel.location}</td>
-              <td>{hostel.capacity}</td>
-              <td>{hostel.wardenName}</td>
+          {hostels.map((h) => (
+            <tr key={h.id}>
+              <td>{h.id}</td>
+              <td>{h.hostelName}</td>
+              <td>{h.location}</td>
+              <td>{h.capacity}</td>
+              <td>{h.wardenName}</td>
               <td>
-                <button onClick={() => handleEdit(hostel)}>Edit</button>
-                <button onClick={() => handleDelete(hostel.id)}>Delete</button>
+                <button onClick={() => editHostel(h)}>Edit</button>
+                <button onClick={() => deleteHostel(h.id)}>Delete</button>
               </td>
             </tr>
           ))}

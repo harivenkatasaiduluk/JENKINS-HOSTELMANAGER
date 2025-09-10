@@ -1,91 +1,98 @@
-/* style.css */
-
-.hostel-manager {
-  max-width: 800px;
-  margin: 30px auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+/* Container */
+.container {
+  width: 80%;
+  margin: 20px auto;
   font-family: Arial, sans-serif;
+  text-align: center;
 }
 
-.hostel-manager h2 {
-  text-align: center;
+/* Title */
+h2 {
   color: #333;
   margin-bottom: 20px;
 }
 
-.hostel-manager form {
+/* Form styling */
+.form {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 30px;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.hostel-manager form input {
-  flex: 1 1 45%;
-  padding: 8px 12px;
+.form input {
+  padding: 8px;
   border: 1px solid #aaa;
-  border-radius: 4px;
+  border-radius: 5px;
   font-size: 14px;
 }
 
-.hostel-manager form button {
-  padding: 8px 16px;
-  background-color: #4caf50;
+.form button {
+  padding: 8px 15px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
+  background: #007bff;
   color: white;
   cursor: pointer;
-  font-weight: bold;
+  font-size: 14px;
+}
+
+.form button:hover {
+  background: #0056b3;
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 10px;
 }
 
-.hostel-manager form button:hover {
-  background-color: #45a049;
-}
-
-.hostel-manager table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.hostel-manager table th,
-.hostel-manager table td {
-  border: 1px solid #ccc;
+table th,
+table td {
+  border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
 }
 
-.hostel-manager table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+table th {
+  background: #007bff;
+  color: white;
 }
 
-.hostel-manager table tr:nth-child(even) {
-  background-color: #fafafa;
+table tr:nth-child(even) {
+  background: #f2f2f2;
 }
 
-.hostel-manager table button {
+/* Action buttons */
+table button {
+  margin: 0 5px;
   padding: 5px 10px;
-  margin: 0 2px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 13px;
 }
 
-.hostel-manager table button:hover {
-  opacity: 0.8;
+table button:first-child {
+  background: #ffc107;
+  color: black;
 }
 
-.hostel-manager table button:first-child {
-  background-color: #2196f3;
+table button:first-child:hover {
+  background: #e0a800;
+}
+
+table button:last-child {
+  background: #dc3545;
   color: white;
 }
 
-.hostel-manager table button:last-child {
-  background-color: #f44336;
-  color: white;
+table button:last-child:hover {
+  background: #b02a37;
 }
