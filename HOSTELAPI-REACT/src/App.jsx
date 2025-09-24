@@ -7,14 +7,15 @@ import FindHostel from "./components/FindHostel";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/add" element={<AddHostel />} />
-        <Route path="/view" element={<ViewHostels />} />
-        <Route path="/find" element={<FindHostel />} />
-      </Routes>
-    </BrowserRouter>
+    <BrowserRouter basename="/reacthostelapi">
+  <Routes>
+    <Route path="/" element={<Dashboard />} />
+    <Route path="/add" element={<AddHostel />} />
+    <Route path="/view" element={<ViewHostels />} />
+    <Route path="/find" element={<FindHostel />} />
+    <Route path="*" element={<div>Page Not Found</div>} />
+  </Routes>
+</BrowserRouter>
   );
 };
 
