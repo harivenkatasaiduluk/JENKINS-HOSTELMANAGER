@@ -7,7 +7,7 @@ const ViewHostels = () => {
   const [hostels, setHostels] = useState([]);
   const [editing, setEditing] = useState(false);
   const [hostel, setHostel] = useState({});
-  const API_URL = `${config.url}/hostelapi`;
+  const API_URL = `${config.url}`;
 
   useEffect(() => {
     fetchHostels();

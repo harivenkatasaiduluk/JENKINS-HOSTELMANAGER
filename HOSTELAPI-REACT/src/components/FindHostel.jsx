@@ -7,7 +7,7 @@ const FindHostel = () => {
   const [search, setSearch] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
-  const API_URL = `${config.url}/hostelapi`;
+  const API_URL = `${config.url}`;
 
   const handleSearch = async () => {
     setResult(null);

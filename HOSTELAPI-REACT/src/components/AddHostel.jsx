@@ -22,7 +22,7 @@ const AddHostel = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${config.url}/hostelapi/add`, hostel);
+      await axios.post(`${config.url}/add`, hostel);
       alert("✅ Hostel Added Successfully!");
       setHostel({
         id: "",
