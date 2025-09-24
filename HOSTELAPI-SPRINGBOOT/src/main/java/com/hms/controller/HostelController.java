@@ -1,73 +1,69 @@
 package com.hms.controller;
 
-import com.hms.entity.Hostel;
-import com.hms.service.HostelService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.hms.entity.Hostel;
+import com.hms.service.HostelService;
+
 @RestController
 @RequestMapping("/hostelapi")
-@CrossOrigin(origins = "*") // allow React frontend
+@CrossOrigin(origins = "*")
 public class HostelController {
 
-    @Autowired
-    private HostelService hostelService;
+    private final HostelService hostelService;
 
-    @GetMapping("/")
-    public String home() {
-        return "Hostel Management System API is Running 🚀";
+    public HostelController(HostelService hostelService) {
+        this.hostelService = hostelService;
     }
-
-    // Create
-    @PostMapping("/add")
-    public ResponseEntity<Hostel> addHostel(@RequestBody Hostel hostel) {
-        Hostel savedHostel = hostelService.addHostel(hostel);
-        return new ResponseEntity<>(savedHostel, HttpStatus.CREATED);
+    @GetMapping("/")
+    public String home() 
+    {
+        return "Welcome to HOSTEL MANAGEMENT SYSTEM";
     }
 
     // Read all
     @GetMapping("/all")
-    public ResponseEntity<List<Hostel>> getAllHostels() {
-        List<Hostel> hostels = hostelService.getAllHostels();
-        return new ResponseEntity<>(hostels, HttpStatus.OK);
+    public List<Hostel> getAllHostels() {
+        return hostelService.getAllHostels();
     }
 
-    // Read by ID
-    @GetMapping("/get/{id}")
-    public ResponseEntity<?> getHostelById(@PathVariable int id) {
-        Hostel hostel = hostelService.getHostelById(id);
-        if (hostel != null) {
-            return new ResponseEntity<>(hostel, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Hostel with ID " + id + " not found.", HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<Hostel> getHostelById(@PathVariable Long id) {
+        return hostelService.getHostelById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Update
+    @PostMapping("/add")
+    public Hostel addHostel(@RequestBody Hostel hostel) {
+        return hostelService.addHostel(hostel);
+    }
+
     @PutMapping("/update")
-    public ResponseEntity<?> updateHostel(@RequestBody Hostel hostel) {
-        Hostel existing = hostelService.getHostelById(hostel.getId());
-        if (existing != null) {
-            Hostel updatedHostel = hostelService.updateHostel(hostel);
-            return new ResponseEntity<>(updatedHostel, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Cannot update. Hostel with ID " + hostel.getId() + " not found.", HttpStatus.NOT_FOUND);
-        }
+    public Hostel updateHostel(@RequestBody Hostel hostel) {
+        return hostelService.updateHostel(hostel);
     }
 
-    // Delete
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteHostel(@PathVariable int id) {
-        Hostel existing = hostelService.getHostelById(id);
-        if (existing != null) {
-            hostelService.deleteHostelById(id);
-            return new ResponseEntity<>("Hostel with ID " + id + " deleted successfully.", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Cannot delete. Hostel with ID " + id + " not found.", HttpStatus.NOT_FOUND);
-        }
+    public void deleteHostel(@PathVariable Long id) {
+        hostelService.deleteHostel(id);
+    }
+
+    @GetMapping("/search")
+    public List<Hostel> searchHostels(@RequestParam String name) {
+        return hostelService.searchByName(name);
     }
 }

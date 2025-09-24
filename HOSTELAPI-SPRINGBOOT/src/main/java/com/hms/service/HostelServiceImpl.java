@@ -1,23 +1,20 @@
 package com.hms.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.hms.entity.Hostel;
 import com.hms.repository.HostelRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HostelServiceImpl implements HostelService {
 
-    @Autowired
-    private HostelRepository hostelRepository;
+    private final HostelRepository hostelRepository;
 
-    @Override
-    public Hostel addHostel(Hostel hostel) {
-        return hostelRepository.save(hostel);
+    public HostelServiceImpl(HostelRepository hostelRepository) {
+        this.hostelRepository = hostelRepository;
     }
 
     @Override
@@ -26,9 +23,13 @@ public class HostelServiceImpl implements HostelService {
     }
 
     @Override
-    public Hostel getHostelById(int id) {
-        Optional<Hostel> opt = hostelRepository.findById(id);
-        return opt.orElse(null);
+    public Optional<Hostel> getHostelById(Long id) {
+        return hostelRepository.findById(id);
+    }
+
+    @Override
+    public Hostel addHostel(Hostel hostel) {
+        return hostelRepository.save(hostel);
     }
 
     @Override
@@ -37,7 +38,12 @@ public class HostelServiceImpl implements HostelService {
     }
 
     @Override
-    public void deleteHostelById(int id) {
+    public void deleteHostel(Long id) {
         hostelRepository.deleteById(id);
+    }
+    
+    @Override
+    public List<Hostel> searchByName(String hostelName) {
+        return hostelRepository.findByHostelNameContainingIgnoreCase(hostelName);
     }
 }

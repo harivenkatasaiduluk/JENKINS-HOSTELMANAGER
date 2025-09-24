@@ -1,12 +1,18 @@
 package com.hms.service;
 
-import java.util.List;
+
+
 import com.hms.entity.Hostel;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface HostelService {
-    Hostel addHostel(Hostel hostel);
     List<Hostel> getAllHostels();
-    Hostel getHostelById(int id);
+    Optional<Hostel> getHostelById(Long id);
+    Hostel addHostel(Hostel hostel);
     Hostel updateHostel(Hostel hostel);
-    void deleteHostelById(int id);
+    void deleteHostel(Long id);
+    
+    List<Hostel> searchByName(String hostelName);
 }

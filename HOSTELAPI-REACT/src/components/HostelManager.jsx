@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+/*import React, { useState, useEffect } from "react";
 import axios from "axios";
 import config from "./config.js"; // Import API base URL
 import "./style.css";
@@ -14,7 +14,7 @@ const HostelManager = () => {
   });
   const [editing, setEditing] = useState(false);
 
-  const API_URL = config.url;
+  const API_URL = `${config.url}/hostelapi`;
 
   // Fetch all hostels
   const fetchHostels = async () => {
@@ -90,8 +90,8 @@ const HostelManager = () => {
     <div className="container">
       <h2>Hostel Management</h2>
 
-      {/* Form */}
-      <div className="form">
+      {/* Form *//*}*/
+     /* <div className="form">
         <input
           type="text"
           name="hostelName"
@@ -129,8 +129,8 @@ const HostelManager = () => {
         <button onClick={resetForm}>Clear</button>
       </div>
 
-      {/* Hostel List */}
-      <table>
+      {/* Hostel List *//*}*/
+     /* <table>
         <thead>
           <tr>
             <th>ID</th>
@@ -161,4 +161,4 @@ const HostelManager = () => {
   );
 };
 
-export default HostelManager;
+export default HostelManager;*/

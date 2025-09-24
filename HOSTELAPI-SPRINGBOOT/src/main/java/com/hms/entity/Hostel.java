@@ -1,38 +1,44 @@
 package com.hms.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "hostel_table")
+@Table(name = "hostels")
 public class Hostel {
-	
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hostel_id")
-    private int id;
-    
-    @Column(name = "hostel_name", nullable = false, length = 50)
+    // Removed @GeneratedValue so ID is manual
+    private Long id;
+
+    @NotBlank(message = "Hostel name is required")
     private String hostelName;
-    
-    @Column(name = "hostel_location", nullable = false, length = 100)
+
+    @NotBlank(message = "Location is required")
     private String location;
-    
-    @Column(name = "hostel_capacity", nullable = false)
+
     private int capacity;
-    
-    @Column(name = "warden_name", nullable = false, length = 50)
+
+    @NotBlank(message = "Warden name is required")
     private String wardenName;
 
-    // Getters & Setters
-    public int getId() {
+    // ✅ Constructors
+    public Hostel() {}
+
+    public Hostel(Long id, String hostelName, String location, int capacity, String wardenName) {
+        this.id = id;
+        this.hostelName = hostelName;
+        this.location = location;
+        this.capacity = capacity;
+        this.wardenName = wardenName;
+    }
+
+    // ✅ Getters & Setters
+    public Long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,12 +68,5 @@ public class Hostel {
     }
     public void setWardenName(String wardenName) {
         this.wardenName = wardenName;
-    }
-
-    // toString()
-    @Override
-    public String toString() {
-        return "Hostel [id=" + id + ", hostelName=" + hostelName + ", location=" + location 
-                + ", capacity=" + capacity + ", wardenName=" + wardenName + "]";
     }
 }

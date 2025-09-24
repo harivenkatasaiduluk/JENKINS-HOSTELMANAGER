@@ -1,6 +1,6 @@
 // src/config.js
 const config = {
-  url: "http://localhost:2030/hostelspringbootapi/hostelapi"
+  url: "http://localhost:2030"
 };
 
 export default config;
