@@ -28,7 +28,7 @@ public class HostelController {
     public HostelController(HostelService hostelService) {
         this.hostelService = hostelService;
     }
-    @GetMapping("/")
+    @GetMapping
     public String home() 
     {
         return "Welcome to HOSTEL MANAGEMENT SYSTEM";
