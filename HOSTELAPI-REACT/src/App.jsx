@@ -7,7 +7,7 @@ import FindHostel from "./components/FindHostel";
 
 const App = () => {
   return (
-    <BrowserRouter basename="/reacthostelapi">
+    
   <Routes>
     <Route path="/" element={<Dashboard />} />
     <Route path="/add" element={<AddHostel />} />
@@ -15,7 +15,7 @@ const App = () => {
     <Route path="/find" element={<FindHostel />} />
     <Route path="*" element={<div>Page Not Found</div>} />
   </Routes>
-</BrowserRouter>
+
   );
 };
 
